@@ -5,9 +5,6 @@ import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.request.model.ItemRequest;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @AllArgsConstructor
 @Validated

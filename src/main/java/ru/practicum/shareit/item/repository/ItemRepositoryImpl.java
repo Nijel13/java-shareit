@@ -30,7 +30,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Item getItemById(long id) { // Метод получения вещи по id
+    public Item getById(long id) { // Метод получения вещи по id
         if (itemMap.containsKey(id)) {
             log.info("Вывод вещи по id={}", id);
             return itemMap.get(id);
@@ -41,14 +41,14 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Item updateItem(Item item) { // Метод обновления вещи
+    public Item update(Item item) { // Метод обновления вещи
         itemMap.put(item.getId(), item);
         log.info("Вещь: {} успешно обновлена", itemMap.get(item.getId()));
         return itemMap.get(item.getId());
     }
 
     @Override
-    public List<ItemDto> getListItemsUserById(Long ownerId) { // Метод получения списка вещей пользователя по id
+    public List<ItemDto> getListById(Long ownerId) { // Метод получения списка вещей пользователя по id
         List<ItemDto> listItemsDtoUser = new ArrayList<>();
         for (Item item : itemMap.values()) {
             if (item.getOwner().equals(ownerId)) {
@@ -60,7 +60,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public List<ItemDto> getSearchItems(String text) { // Метод поиска вещей по строке
+    public List<ItemDto> getSearch(String text) { // Метод поиска вещей по строке
         text = text.toLowerCase();
         List<ItemDto> listItemDtoResult = new ArrayList<>();
         for (Item item : itemMap.values()) {

@@ -15,9 +15,6 @@ import java.util.List;
 import static ru.practicum.shareit.user.mapper.UserMapper.toUser;
 import static ru.practicum.shareit.user.mapper.UserMapper.toUserDto;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -27,32 +24,32 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping // Метод добавления пользователя
-    public UserDto addUser(@Valid @RequestBody UserDto userDto) {
+    public UserDto add(@Valid @RequestBody UserDto userDto) {
         log.info("Добавляем пользователя по имени: {}.", userDto.getName());
-        return toUserDto(userService.addUser(toUser(userDto)));
+        return toUserDto(userService.add(toUser(userDto)));
     }
 
     @PatchMapping("/{userId}") // Метод обновления пользователя по его id
-    public UserDto updateUser(@Valid @Min(1) @PathVariable Long userId, @Valid @RequestBody UserDto userDto) {
+    public UserDto update(@Valid @Min(1) @PathVariable Long userId, @Valid @RequestBody UserDto userDto) {
         log.info("Обновляем пользователя по Id={}.", userId);
-        return toUserDto(userService.updateUser(toUser(userDto), userId));
+        return toUserDto(userService.update(toUser(userDto), userId));
     }
 
     @GetMapping("/{userId}") // Метод получения пользователя по его id
-    public UserDto updateUser(@Valid @Min(1) @PathVariable Long userId) {
+    public UserDto update(@Valid @PathVariable Long userId) {
         log.info("Получаем пользователя по Id={}.", userId);
-        return toUserDto(userService.getUserById(userId));
+        return toUserDto(userService.getById(userId));
     }
 
     @DeleteMapping("/{userId}") // Метод удаления пользователя по id
-    public void deleteUser(@Valid @Min(1) @PathVariable Long userId) {
+    public void delete(@Valid @Min(1) @PathVariable Long userId) {
         log.info("Удалаяем пользователя по Id={}.", userId);
-        userService.deleteUser(userId);
+        userService.delete(userId);
     }
 
     @GetMapping
-    public List<User> getListUsers() { // Метод получения списка всех пользователей
+    public List<User> getList() { // Метод получения списка всех пользователей
         log.info("Получаем список всех пользователей.");
-        return userService.getListUsers();
+        return userService.getList();
     }
 }

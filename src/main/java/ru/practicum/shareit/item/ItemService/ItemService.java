@@ -6,13 +6,13 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemService {
-    Item addItem(Item item, Long ownerId);
+    Item add(Item item, Long ownerId);
 
-    Item getItemById(Long id, Long ownerId);
+    Item getById(Long id, Long ownerId);
 
-    Item updateItem(Item item, Long id, Long ownerId);
+    Item update(Item item, Long id, Long ownerId);
 
-    List<ItemDto> getListItemsUserById(Long ownerId);
+    List<ItemDto> getListUserById(Long ownerId);
 
-    List<ItemDto> getSearchItems(String text);
+    List<ItemDto> getSearch(String text);
 }

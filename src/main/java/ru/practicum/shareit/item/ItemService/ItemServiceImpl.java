@@ -8,7 +8,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.UserService.UserService;
-import ru.practicum.shareit.validation.ValidationService;
+import ru.practicum.shareit.validation.ItemValidationService;
+import ru.practicum.shareit.validation.UserValidationService;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,35 +22,36 @@ import static ru.practicum.shareit.item.mapper.ItemMapper.toItemDto;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository repository;
     private final UserService userService;
-    private final ValidationService validationService;
+    private final UserValidationService userValidationService;
+    private final ItemValidationService itemValidationService;
 
     @Override
-    public Item addItem(Item item, Long ownerId) {
-        userService.getUserById(ownerId); // Проверяем владельца вещи по id на существование в памяти
+    public Item add(Item item, Long ownerId) {
+        userService.getById(ownerId); // Проверяем владельца вещи по id на существование в памяти
         item.setOwner(ownerId);
-        validationService.checkItemDtoWhenAdd(toItemDto(item)); // Проверяем поля объекта itemDto перед добавлением
+        itemValidationService.checkItemDtoWhenAdd(toItemDto(item)); // Проверяем поля объекта itemDto перед добавлением
         return repository.add(item);
     }
 
     @Override
-    public Item getItemById(Long id, Long ownerId) {
+    public Item getById(Long id, Long ownerId) {
         if (!repository.getItemMap().containsKey(id)) { // Проверяем вещь по id на существование в памяти
             log.error("Вещь по id={} отсутствует в памяти.", id);
             throw new NotFoundException("Вещь по id=" + id + " не существует");
         }
-        userService.getUserById(ownerId); // Проверяем владельца вещи по id на существование в памяти
-        return repository.getItemById(id);
+        userService.getById(ownerId); // Проверяем владельца вещи по id на существование в памяти
+        return repository.getById(id);
     }
 
     @Override
-    public Item updateItem(Item item, Long itemId, Long ownerId) {
-        getItemById(itemId, ownerId); // Проверяем вещь по id на существование в памяти
+    public Item update(Item item, Long itemId, Long ownerId) {
+        getById(itemId, ownerId); // Проверяем вещь по id на существование в памяти
         item.setId(itemId);
-        userService.getUserById(ownerId); // Проверяем владельца вещи по id на существование в памяти
+        userService.getById(ownerId); // Проверяем владельца вещи по id на существование в памяти
         item.setOwner(ownerId);
-        validationService.checkOwnerItem(itemId, ownerId); // Проверяем соответствие владельца вещи
+        itemValidationService.checkOwnerItem(itemId, ownerId); // Проверяем соответствие владельца вещи
 
-        Item updateItem = getItemById(itemId, ownerId);
+        Item updateItem = getById(itemId, ownerId);
         if (item.getName() == null) {
             item.setName(updateItem.getName());
         }
@@ -71,23 +73,23 @@ public class ItemServiceImpl implements ItemService {
         if (!updateItem.getOwner().equals(item.getOwner())) {
             updateItem.setOwner(item.getOwner());
         }
-        return repository.updateItem(updateItem);
+        return repository.update(updateItem);
     }
 
     @Override
-    public List<ItemDto> getListItemsUserById(Long ownerId) {
-        userService.getUserById(ownerId); // Проверяем владельца вещи по id на существование в памяти
-        return repository.getListItemsUserById(ownerId);
+    public List<ItemDto> getListUserById(Long ownerId) {
+        userService.getById(ownerId); // Проверяем владельца вещи по id на существование в памяти
+        return repository.getListById(ownerId);
     }
 
     @Override
-    public List<ItemDto> getSearchItems(String text) {
+    public List<ItemDto> getSearch(String text) {
         if (text == null || text.isBlank()) { // Проверка на пустою строку и на null
             log.error("В поиск передано пустое значение {}!", text);
             return Collections.emptyList();
         }
         log.info("Осуществляем поиск вещи содержащее текст: {}.", text);
-        return repository.getSearchItems(text);
+        return repository.getSearch(text);
     }
 
 }

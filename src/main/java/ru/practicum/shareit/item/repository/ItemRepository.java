@@ -9,14 +9,14 @@ import java.util.Map;
 public interface ItemRepository {
     Item add(Item item);
 
-    Item getItemById(long id);
+    Item getById(long id);
 
-    Item updateItem(Item item);
+    Item update(Item item);
 
     Map<Long, Item> getItemMap();
 
-    List<ItemDto> getListItemsUserById(Long ownerId);
+    List<ItemDto> getListById(Long ownerId);
 
-    List<ItemDto> getSearchItems(String text);
+    List<ItemDto> getSearch(String text);
 
 }

@@ -17,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     private Long count = 0L;
 
     @Override
-    public User addUser(User user) { // Метод добавления пользователя
+    public User add(User user) { // Метод добавления пользователя
         user.setId(++count);
         userMap.put(user.getId(), user);
         log.info("Пользователь {} успешно добавлен!", userMap.get(user.getId()));
@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserById(long id) { // Метод получения пользователя по id
+    public User getById(long id) { // Метод получения пользователя по id
         if (userMap.containsKey(id)) {
             log.info("Вывод пользователя по id={}.", id);
             return userMap.get(id);
@@ -36,20 +36,20 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateUser(User user) { // Метод обновления пользователя
+    public User update(User user) { // Метод обновления пользователя
         userMap.put(user.getId(), user);
         log.info("Пользователь по id={} успешно обновлен!", user.getId());
         return userMap.get(user.getId());
     }
 
     @Override
-    public void deleteUser(Long id) { // Метод удаления пользователя по id
+    public void delete(Long id) { // Метод удаления пользователя по id
         userMap.remove(id);
         log.info("Пользователь по id={} успешно удален!", id);
     }
 
     @Override
-    public List<User> getListUsers() { // Метод получения списка всех пользователей
+    public List<User> getList() { // Метод получения списка всех пользователей
         log.info("Выводим список всех пользователей.");
         return new ArrayList<>(userMap.values());
     }

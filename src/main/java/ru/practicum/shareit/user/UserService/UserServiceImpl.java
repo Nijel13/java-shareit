@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.validation.ValidationService;
+import ru.practicum.shareit.validation.UserValidationService;
 
 import java.util.List;
 
@@ -13,25 +13,25 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
-    private final ValidationService validationService;
+    private final UserValidationService userValidationService;
 
     @Override
-    public User addUser(User user) {
-        validationService.checkUniqueEmailUserAdd(user); // Проверка объекта user на уникальность e-mail
-        return repository.addUser(user);
+    public User add(User user) {
+        userValidationService.checkUniqueEmailUserAdd(user); // Проверка объекта user на уникальность e-mail
+        return repository.add(user);
     }
 
     @Override
-    public User getUserById(long id) {
-        return repository.getUserById(id);
+    public User getById(long id) {
+        return repository.getById(id);
     }
 
     @Override
-    public User updateUser(User user, Long userId) {
-        getUserById(userId); // Проверка пользователя по его id на существование в памяти
+    public User update(User user, Long userId) {
+        getById(userId); // Проверка пользователя по его id на существование в памяти
         user.setId(userId);
-        validationService.checkUniqueEmailUserUpdate(user); // Проверка объекта userDto на уникальность e-mail
-        User updateUser = repository.getUserById(user.getId());
+        userValidationService.checkUniqueEmailUserUpdate(user); // Проверка объекта userDto на уникальность e-mail
+        User updateUser = repository.getById(user.getId());
         if (user.getName() == null) {
             user.setName(updateUser.getName());
         }
@@ -44,17 +44,18 @@ public class UserServiceImpl implements UserService {
         if (!user.getEmail().isBlank() && !updateUser.getEmail().equals(user.getEmail())) {
             updateUser.setEmail(user.getEmail());
         }
-        return repository.updateUser(updateUser);
+        return repository.update(updateUser);
+    }
+
+
+    @Override
+    public void delete(Long id) {
+        repository.delete(id);
     }
 
     @Override
-    public void deleteUser(Long id) {
-        repository.deleteUser(id);
-    }
-
-    @Override
-    public List<User> getListUsers() {
-        return repository.getListUsers();
+    public List<User> getList() {
+        return repository.getList();
     }
 
 }
